@@ -4,70 +4,114 @@ import { withFauxDOM } from "react-faux-dom";
 import * as d3 from "d3";
 import "./Chart.css";
 
+var formatMinutes = function(d) {
+    var hours = Math.floor(d / 3600),
+        minutes = Math.floor((d - hours * 3600) / 60),
+        seconds = d - minutes * 60;
+    var output = seconds + "s";
+    if (minutes) {
+        output = minutes + "m " + output;
+    }
+    if (hours) {
+        output = hours + "h " + output;
+    }
+    return output;
+};
+
 class Chart extends React.Component {
     constructor(props) {
         super(props);
+
         this.renderD3 = this.renderD3.bind(this);
+        this.updateD3 = this.updateD3.bind(this);
+
+        // set the dimensions and margins of the graph
+        const margin = { top: 20, right: 20, bottom: 30, left: 50 };
+        const width = props.width - margin.left - margin.right;
+        const height = 500 - margin.top - margin.bottom;
+
+        // set the ranges
+        const x = d3.scaleTime().range([0, width]);
+        const y = d3.scaleLinear().range([height, 0]);
+
+        const xAxis = d3.axisBottom(x);
+        const yAxis = d3.axisLeft(y);
+
+        this.state = { x, y, xAxis, yAxis, margin, width, height };
     }
 
     componentDidMount() {
         this.renderD3();
     }
 
-    componentDidUpdate(prevProps, prevState) {}
+    componentDidUpdate(prevProps, prevState) {
+        // do not compare props.chart as it gets updated in updateD3()
+        if (this.props.data !== prevProps.data) {
+            this.updateD3();
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        //console.log(nextProps);
+        //this.updateStateFromProps(nextProps);
+        //this.renderD3();
+    }
+
+    // componentWillMount() {
+    //     const { xAxis, yAxis, grid } = this.state;
+
+    // const svg = d3.select(this.svg).transition();
+    // svg.select(`.${classes.xAxis}`)
+    //   .duration(100)
+    //   .call(xAxis);
+
+    //     svg
+    //         .append("g")
+    //         .attr("transform", "translate(0," + height + ")")
+    //         .call(d3.axisBottom(x));
+    // }
+
+    updateStateFromProps = props => {
+        //console.log("hello");
+        //const x = this.state.x.domain(d3.extent(props.data, d => d.date));
+        //this.setState({ x });
+    };
 
     render() {
         return <div>{this.props.chart}</div>;
     }
 
     renderD3() {
-        const { chartData } = this.props;
+        const { data } = this.props;
+
+        const { x, y, xAxis, yAxis, margin, width, height } = this.state;
+
         // This will create a faux div and store its virtual DOM in state.chart
         var faux = this.props.connectFauxDOM("div", "chart");
 
-        /*
-       D3 code below by Alan Smith, http://bl.ocks.org/alansmithy/e984477a741bc56db5a5
-       The only changes made for this example are...
-       1) feeding D3 the faux node created above
-       2) calling this.animateFauxDOM(duration) after each animation kickoff
-       3) move data generation and button code to parent component
-       4) data and title provided as props by parent component
-       5) reattach to faux dom for updates
-       6) move rejoining of data and chart updates to updateD3()
-       7) code update for D3 version 4
-    */
-
-        // set the dimensions and margins of the graph
-        var margin = { top: 20, right: 20, bottom: 30, left: 50 },
-            width = 960 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
-
         // parse the date / time
-        var parseTime = d3.timeParse("%d-%b-%y");
-
-        // set the ranges
-        var x = d3.scaleTime().range([0, width]);
-        var y = d3.scaleLinear().range([height, 0]);
+        var parseTime = d3.timeParse("%Q");
+        // var midnight = parseTime("00:00:00");
 
         // define the area
         var area = d3
             .area()
             .x(function(d) {
-                return x(d.date);
+                return x(d.timestamp);
             })
             .y0(height)
             .y1(function(d) {
-                return y(d.close);
+                return y(d.cpu);
             });
 
         // define the line
         var valueline = d3
             .line()
             .x(function(d) {
-                return x(d.date);
+                return x(d.timestamp);
             })
             .y(function(d) {
-                return y(d.close);
+                return y(d.cpu);
             });
 
         // append the svg obgect to the body of the page
@@ -86,46 +130,92 @@ class Chart extends React.Component {
             );
 
         // format the data
-        chartData.forEach(function(d) {
-            d.date = parseTime(d.date);
-            d.close = +d.close;
+        data.forEach(function(d) {
+            d.timestamp = parseTime(d.timestamp);
+            d.cpu = +d.cpu;
         });
 
-        // scale the range of the data
-        x.domain(
-            d3.extent(chartData, function(d) {
-                return d.date;
-            })
-        );
-        y.domain([
-            0,
-            d3.max(chartData, function(d) {
-                return d.close;
-            })
-        ]);
+        x.domain(d3.extent(data, d => d.timestamp));
+
+        y.domain([0, 100]);
 
         // add the area
         svg
             .append("path")
-            .data([chartData])
+            .data([data])
             .attr("class", "area")
             .attr("d", area);
 
         // add the valueline path.
         svg
             .append("path")
-            .data([chartData])
+            .data([data])
             .attr("class", "line")
             .attr("d", valueline);
 
         // add the X Axis
         svg
             .append("g")
+            .attr("class", "x-axis")
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x));
 
         // add the Y Axis
         svg.append("g").call(d3.axisLeft(y));
+    }
+
+    updateD3() {
+        const { data } = this.props;
+        const { x, y, xAxis, height } = this.state;
+
+        // reattach to faux dom
+        var faux = this.props.connectFauxDOM("div", "chart");
+
+        var parseTime = d3.timeParse("%Q");
+
+        // define the area
+        var area = d3
+            .area()
+            .x(function(d) {
+                return x(d.timestamp);
+            })
+            .y0(height)
+            .y1(function(d) {
+                return y(d.cpu);
+            });
+
+        var valueline = d3
+            .line()
+            .x(function(d) {
+                return x(d.timestamp);
+            })
+            .y(function(d) {
+                return y(d.cpu);
+            });
+
+        var svg = d3.select(faux).select("svg");
+
+        // format the data
+        data.forEach(function(d) {
+            d.timestamp = parseTime(d.timestamp);
+            d.cpu = +d.cpu;
+        });
+
+        x.domain(d3.extent(data, d => d.timestamp));
+
+        svg
+            .select(".area")
+            .data([data])
+            .attr("d", area);
+
+        svg
+            .select(".line")
+            .data([data])
+            .attr("d", valueline);
+
+        svg.select(".x-axis").call(d3.axisBottom(x));
+
+        this.props.animateFauxDOM(800);
     }
 }
 

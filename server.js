@@ -12,7 +12,6 @@ let dataPoint = null;
 let history = [];
 
 function loop() {
-    console.log("loop");
     cpuLoad((error, result) => {
         if (error) {
             console.log("CPU load - error retrieving");

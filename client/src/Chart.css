@@ -1,9 +1,9 @@
 .line {
     fill: none;
-    stroke: steelblue;
+    stroke: rgba(255, 255, 255, 0.2);
     stroke-width: 2px;
 }
 
 .area {
-    fill: lightsteelblue;
+    fill: rgba(255, 255, 255, 0.05);
 }
