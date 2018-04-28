@@ -1,22 +1,38 @@
 const express = require("express");
-
 const app = express();
-const port = process.env.PORT || 5000;
-
-// average the CPU cores in case have more than one. Will handle array of 1 fine too.
-
+const server = require("http").Server(app);
+const io = require("socket.io")(server);
 const os = require("os");
 const cpu = require("windows-cpu");
-const delaySeconds = 1;
+
+const port = process.env.PORT || 5000;
+const delaySeconds = 10;
 const decimals = 3;
+let dataPoint = null;
+let history = [];
+
 function loop() {
+    console.log("loop");
     cpuLoad((error, result) => {
         if (error) {
             console.log("CPU load - error retrieving");
         } else {
-            console.log("CPU load is " + result);
+            dataPoint = {
+                cpu: result, // load average for 1 minute
+                timestamp: Date.now()
+            };
+
+            history.push(dataPoint);
+            if (history.length > 10) {
+                history.shift();
+            }
+
+            io.emit("monitor", history);
+
+            console.log(history);
         }
     });
+
     setTimeout(loop, delaySeconds * 1000);
 }
 
@@ -41,9 +57,20 @@ function cpuLoad(cb) {
     }
 }
 
-app.get("/api/hello", (req, res) => {
-    loop();
-    res.send({ express: "Hello From Express" });
+const listen = () => {
+    server.listen(port, () => {
+        console.log(`Server listening on port ${port}...`);
+    });
+};
+
+loop();
+
+// Setup socket connection with client
+io.on("connection", client => {
+    client.emit("initialState", {
+        history: history
+    });
 });
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+// Start server
+listen();
