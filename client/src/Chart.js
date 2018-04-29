@@ -190,24 +190,26 @@ class Chart extends React.Component {
             .attr("d", valueline);
 
         // rejoin data
-        var circle = svg.selectAll("dot").data(data);
+        // var circle = svg.selectAll("dot").data(data);
 
-        // remove unneeded circles
-        circle.exit().remove();
+        // // remove unneeded circles
+        // circle.exit().remove();
+
+        svg.selectAll("circle").remove();
 
         // Add the scatterplot
-        // svg
-        //     .selectAll("dot")
-        //     .data(data)
-        //     .enter()
-        //     .append("circle")
-        //     .attr("r", 3.5)
-        //     .attr("cx", function(d) {
-        //         return x(d.timestamp);
-        //     })
-        //     .attr("cy", function(d) {
-        //         return y(d.cpu);
-        //     });
+        svg
+            .selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("r", 3.5)
+            .attr("cx", function(d) {
+                return x(d.timestamp);
+            })
+            .attr("cy", function(d) {
+                return y(d.cpu);
+            });
 
         this.props.animateFauxDOM(800);
     }
