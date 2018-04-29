@@ -7,11 +7,21 @@ const initSocket = dispatch => {
     const socket = io.connect(`http://localhost:${port}/`);
 
     socket.on("initialState", data => {
-        dispatch(actions.setHistory(data.history));
+        dispatch(actions.setCpuHistory2(data.cpuHistory2));
+        dispatch(actions.setCpuHistory10(data.cpuHistory10));
+        dispatch(actions.setCpuHistory15(data.cpuHistory15));
     });
 
-    socket.on("monitor", history => {
-        dispatch(actions.setHistory(history));
+    socket.on("monitor2", cpuHistory2 => {
+        dispatch(actions.setCpuHistory2(cpuHistory2));
+    });
+
+    socket.on("monitor10", cpuHistory10 => {
+        dispatch(actions.setCpuHistory10(cpuHistory10));
+    });
+
+    socket.on("monitor15", cpuHistory15 => {
+        dispatch(actions.setCpuHistory15(cpuHistory15));
     });
 
     return socket;

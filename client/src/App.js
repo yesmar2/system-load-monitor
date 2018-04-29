@@ -36,6 +36,30 @@ class App extends React.Component {
         this.setState({ chartWidth: window.innerWidth });
     }
 
+    componentDidUpdate(prevProps) {
+        const { cpuHistory2 } = prevProps.model;
+
+        let sum = 0;
+        let avg = 0;
+
+        if (cpuHistory2.length === 10) {
+            sum = cpuHistory2.reduce((a, b) => {
+                return a + parseInt(b.cpu);
+            }, 0);
+            avg = sum / cpuHistory2.length;
+        }
+
+        console.log(avg);
+
+        if (avg > 10) {
+            Alert.info("Resized", {
+                position: "top-right",
+                effect: "slide",
+                timeout: "none"
+            });
+        }
+    }
+
     handleAlert() {
         Alert.info("Resized", {
             position: "top-right",
@@ -45,12 +69,12 @@ class App extends React.Component {
     }
 
     render() {
-        const { history } = this.props.model;
-        // console.log(history);
+        const { cpuHistory2, cpuHistory10, cpuHistory15 } = this.props.model;
+
         return (
             <div>
                 <Alert stack={{ limit: 3 }} />
-                <Chart data={history} width={this.state.chartWidth} />
+                <Chart data={cpuHistory10} width={this.state.chartWidth} />
             </div>
         );
     }
