@@ -53,30 +53,24 @@ class Chart extends React.Component {
         this.updateD3 = this.updateD3.bind(this);
 
         // set the dimensions and margins of the graph
-        const margin = { top: 20, right: 20, bottom: 30, left: 50 };
+        const margin = { top: 50, right: 0, bottom: 50, left: 50 };
         const width = props.width - margin.left - margin.right;
-        const height = 500 - margin.top - margin.bottom;
+        const height = window.innerHeight - margin.top - margin.bottom;
 
         // set the ranges
         const x = d3.scaleLinear().range([0, width]);
         const y = d3.scaleLinear().range([height, 0]);
 
-        const xAxis = d3.axisBottom(x).ticks(5, "s");
-        const yAxis = d3.axisLeft(y);
+        // const xAxis = d3.axisBottom(x).ticks(5);
+        // const yAxis = d3.axisLeft(y);
 
-        this.state = { x, y, xAxis, yAxis, margin, width, height };
+        this.state = { x, y, margin, width, height };
     }
 
     componentDidMount() {
         this.renderD3();
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        // do not compare props.chart as it gets updated in updateD3()
-        if (this.props.data !== prevProps.data) {
-            this.updateD3();
-        }
-    }
     componentDidUpdate(prevProps, prevState) {
         // do not compare props.chart as it gets updated in updateD3()
         if (this.props.data !== prevProps.data) {
@@ -91,7 +85,7 @@ class Chart extends React.Component {
     renderD3() {
         const { data } = this.props;
 
-        const { x, y, xAxis, yAxis, margin, width, height } = this.state;
+        const { x, y, margin, width, height } = this.state;
 
         // This will create a faux div and store its virtual DOM in state.chart
         var faux = this.props.connectFauxDOM("div", "chart");
@@ -110,7 +104,7 @@ class Chart extends React.Component {
             );
 
         // Set domain range for axes
-        x.domain([10, 0]);
+        x.domain([0, 10]);
         y.domain([0, 100]);
 
         // add a path tags for the area and line
@@ -125,8 +119,14 @@ class Chart extends React.Component {
             .call(
                 d3
                     .axisBottom(x)
-                    .ticks(3)
-                    .tickFormat(d => d + "m ago")
+                    .ticks(5)
+                    .tickFormat(d => {
+                        if (d === 0 || d === 10) {
+                            return "";
+                        } else {
+                            return d + "m ago";
+                        }
+                    })
             );
 
         // add the Y Axis
@@ -148,7 +148,7 @@ class Chart extends React.Component {
 
     updateD3() {
         const { data } = this.props;
-        const { x, y, xAxis, height } = this.state;
+        const { x, y, height } = this.state;
 
         // reattach to faux dom
         var faux = this.props.connectFauxDOM("div", "chart");
@@ -209,7 +209,8 @@ class Chart extends React.Component {
             .data(data)
             .enter()
             .append("circle")
-            .attr("r", 3.5)
+            .attr("class", "dot")
+            .attr("r", 6)
             .attr("cx", function(d) {
                 return x(d.timestamp);
             })

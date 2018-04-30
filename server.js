@@ -24,17 +24,18 @@ function loop() {
             };
 
             cpuHistory2.push(dataPoint);
-            if (cpuHistory2.length > 12) {
+
+            if (cpuHistory2.length > 13) {
                 cpuHistory2.shift();
             }
 
             cpuHistory10.push(dataPoint);
-            if (cpuHistory10.length > 60) {
+            if (cpuHistory10.length > 61) {
                 cpuHistory10.shift();
             }
 
             cpuHistory15.push(dataPoint);
-            if (cpuHistory15.length > 90) {
+            if (cpuHistory15.length > 91) {
                 cpuHistory15.shift();
             }
 

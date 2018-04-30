@@ -5,10 +5,25 @@
 }
 
 .area {
-    fill: rgba(255, 255, 255, 0.05);
+    fill: rgba(255, 255, 255, 0.1);
 }
 
 .dot {
-    fill: #ffab00;
-    stroke: #fff;
+    fill: #fff;
+    stroke: rgb(71, 140, 204);
+    stroke-width: 3px;
+}
+
+.domain {
+    stroke: rgba(255, 255, 255, 0.2);
+    stroke-width: 2px;
+}
+
+.tick line {
+    display: none;
+}
+
+.tick text {
+    fill: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
 }

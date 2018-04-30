@@ -1,0 +1,41 @@
+.app {
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+
+header {
+    position: absolute;
+    top: 30px;
+    left: 100px;
+}
+
+h1 {
+    color: #fff;
+    font-weight: 400;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+h2 {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 400;
+    margin: 0;
+    font-size: 1rem;
+}
+
+.s-alert-wrapper > .s-alert-box {
+    max-width: 350px;
+}
+
+.s-alert-box h1 {
+    font-size: 1.2rem;
+}
+
+.s-alert-box.s-alert-error {
+    background: rgb(247, 90, 91);
+}
+
+.s-alert-box.s-alert-success {
+    background: rgb(94, 184, 96);
+}

@@ -1,18 +1,9 @@
 import React from "react";
 import Alert from "react-s-alert";
 import Chart from "./Chart";
-
-// mandatory
+import "./App.css";
 import "react-s-alert/dist/s-alert-default.css";
-
-// optional - you can choose the effect you want
 import "react-s-alert/dist/s-alert-css-effects/slide.css";
-// import 'react-s-alert/dist/s-alert-css-effects/scale.css';
-// import 'react-s-alert/dist/s-alert-css-effects/bouncyflip.css';
-// import 'react-s-alert/dist/s-alert-css-effects/flip.css';
-// import 'react-s-alert/dist/s-alert-css-effects/genie.css';
-// import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
-// import 'react-s-alert/dist/s-alert-css-effects/stackslide.css';
 
 class App extends React.Component {
     constructor(props) {
@@ -20,7 +11,7 @@ class App extends React.Component {
 
         this.handleResize = this.handleResize.bind(this);
 
-        this.state = { chartWidth: window.innerWidth };
+        this.state = { chartWidth: window.innerWidth, loadStatus: "normal" };
     }
 
     componentDidMount() {
@@ -32,7 +23,6 @@ class App extends React.Component {
     }
 
     handleResize() {
-        this.handleAlert();
         this.setState({ chartWidth: window.innerWidth });
     }
 
@@ -42,39 +32,53 @@ class App extends React.Component {
         let sum = 0;
         let avg = 0;
 
-        if (cpuHistory2.length === 10) {
+        if (cpuHistory2.length > 0) {
             sum = cpuHistory2.reduce((a, b) => {
                 return a + parseInt(b.cpu);
             }, 0);
             avg = sum / cpuHistory2.length;
         }
 
-        console.log(avg);
-
-        if (avg > 10) {
-            Alert.info("Resized", {
-                position: "top-right",
-                effect: "slide",
-                timeout: "none"
-            });
+        if (avg > 20) {
+            if (this.state.loadStatus === "normal") {
+                this.setState({ loadStatus: "high" });
+                Alert.error(
+                    `<h1>High load generation alert</h1><h2>CPU = ${avg}%, triggered at 10:00 AM</h2>`,
+                    {
+                        position: "top-right",
+                        effect: "slide",
+                        timeout: "none",
+                        html: true
+                    }
+                );
+            }
+        } else {
+            if (this.state.loadStatus === "high") {
+                this.setState({ loadStatus: "normal" });
+                Alert.success(
+                    "<h1>Alert recovered</h1><h2>Triggered at 10:01 AM</h2>",
+                    {
+                        position: "top-right",
+                        effect: "slide",
+                        timeout: "none",
+                        html: true
+                    }
+                );
+            }
         }
-    }
-
-    handleAlert() {
-        Alert.info("Resized", {
-            position: "top-right",
-            effect: "slide",
-            timeout: "none"
-        });
     }
 
     render() {
         const { cpuHistory2, cpuHistory10, cpuHistory15 } = this.props.model;
 
         return (
-            <div>
-                <Alert stack={{ limit: 3 }} />
+            <div className="app">
+                <header>
+                    <h1>CPU Load Monitor</h1>
+                    <h2>% utilization over past 10 minutes</h2>
+                </header>
                 <Chart data={cpuHistory10} width={this.state.chartWidth} />
+                <Alert stack={{ limit: 6 }} />
             </div>
         );
     }
