@@ -39,3 +39,13 @@ h2 {
 .s-alert-box.s-alert-success {
     background: rgb(94, 184, 96);
 }
+
+.notifications {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+}
+
+.notifications .material-icons {
+    color: #fff;
+}
