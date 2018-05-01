@@ -1,0 +1,22 @@
+.notifications {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+}
+
+.s-alert-wrapper > .s-alert-box {
+    max-width: 350px;
+}
+
+.s-alert-box h1 {
+    font-size: 1.2rem;
+    text-transform: none;
+}
+
+.s-alert-box.s-alert-error {
+    background: rgb(247, 90, 91);
+}
+
+.s-alert-box.s-alert-success {
+    background: rgb(94, 184, 96);
+}

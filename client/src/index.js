@@ -7,10 +7,6 @@ import App from "./App";
 import initSocket from "./initSocket";
 import "./index.css";
 
-// const el = document.createElement("div");
-// el.id = "react-root";
-// document.body.appendChild(el);
-
 const store = createStore(reducer);
 
 // Init socket connection to redux store

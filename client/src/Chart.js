@@ -53,7 +53,7 @@ class Chart extends React.Component {
         this.updateD3 = this.updateD3.bind(this);
 
         // set the dimensions and margins of the graph
-        const margin = { top: 30, right: 0, bottom: 50, left: 50 };
+        const margin = { top: 30, right: 30, bottom: 50, left: 50 };
         const width = props.width - margin.left - margin.right;
         const height = window.innerHeight - margin.top - margin.bottom;
 
@@ -104,7 +104,7 @@ class Chart extends React.Component {
             );
 
         // Set domain range for axes
-        x.domain([0, 10]);
+        x.domain([10, 0]);
         y.domain([0, 100]);
 
         // add a path tags for the area and line
@@ -120,13 +120,7 @@ class Chart extends React.Component {
                 d3
                     .axisBottom(x)
                     .ticks(5)
-                    .tickFormat(d => {
-                        if (d === 0 || d === 10) {
-                            return "";
-                        } else {
-                            return d + "m ago";
-                        }
-                    })
+                    .tickFormat(d => d + "m ago")
             );
 
         // add the Y Axis
@@ -195,12 +189,7 @@ class Chart extends React.Component {
             .datum(data)
             .attr("d", valueline);
 
-        // rejoin data
-        // var circle = svg.selectAll("dot").data(data);
-
-        // // remove unneeded circles
-        // circle.exit().remove();
-
+        // remove to re-render below
         svg.selectAll("circle").remove();
 
         // Add the scatterplot

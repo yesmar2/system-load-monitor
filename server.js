@@ -4,14 +4,18 @@ const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const os = require("os");
 const cpu = require("windows-cpu");
+const checkNotificationThreshold = require("./checkNotificationThreshold.js");
 
 const port = process.env.PORT || 5000;
 const delaySeconds = 10;
+
 let dataPoint = null;
+let notification = null;
 
 let cpuHistory2 = [];
 let cpuHistory10 = [];
 let cpuHistory15 = [];
+let notifications = [];
 
 function loop() {
     cpuLoad((error, result) => {
@@ -25,8 +29,20 @@ function loop() {
 
             cpuHistory2.push(dataPoint);
 
-            if (cpuHistory2.length > 13) {
+            if (cpuHistory2.length > 2) {
                 cpuHistory2.shift();
+
+                notification = checkNotificationThreshold(
+                    cpuHistory2,
+                    notifications[0],
+                    20
+                );
+
+                if (notification) {
+                    console.log(notification);
+                    notifications.unshift(notification);
+                    io.emit("notification", notification);
+                }
             }
 
             cpuHistory10.push(dataPoint);
@@ -42,8 +58,6 @@ function loop() {
             io.emit("monitor2", cpuHistory2);
             io.emit("monitor10", cpuHistory10);
             io.emit("monitor15", cpuHistory15);
-
-            //console.log(cpuHistory10);
         }
     });
 
@@ -55,7 +69,7 @@ function cpuLoad(cb) {
         if (error) {
             return cb(error);
         }
-        console.log("cpus", cpus);
+        //console.loconsole.log("cpus", cpus);
 
         let sum = 0;
         let avg = 0;
@@ -85,7 +99,8 @@ io.on("connection", client => {
     client.emit("initialState", {
         cpuHistory2: cpuHistory2,
         cpuHistory10: cpuHistory10,
-        cpuHistory15: cpuHistory15
+        cpuHistory15: cpuHistory15,
+        notifications
     });
 });
 

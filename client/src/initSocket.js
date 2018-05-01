@@ -10,6 +10,12 @@ const initSocket = dispatch => {
         dispatch(actions.setCpuHistory2(data.cpuHistory2));
         dispatch(actions.setCpuHistory10(data.cpuHistory10));
         dispatch(actions.setCpuHistory15(data.cpuHistory15));
+        dispatch(
+            actions.setField({
+                key: "notifications",
+                value: data.notifications
+            })
+        );
     });
 
     socket.on("monitor2", cpuHistory2 => {
@@ -22,6 +28,10 @@ const initSocket = dispatch => {
 
     socket.on("monitor15", cpuHistory15 => {
         dispatch(actions.setCpuHistory15(cpuHistory15));
+    });
+
+    socket.on("notification", notification => {
+        dispatch(actions.addNotification(notification));
     });
 
     return socket;
