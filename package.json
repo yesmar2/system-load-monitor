@@ -4,6 +4,7 @@
     "scripts": {
         "client": "cd client && npm start",
         "server": "nodemon server.js",
+        "test": "jest",
         "dev":
             "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
     },
@@ -16,6 +17,13 @@
     },
     "devDependencies": {
         "concurrently": "^3.5.0",
+        "jest": "^22.4.3",
         "nodemon": "^1.17.3"
+    },
+    "jest": {
+        "testPathIgnorePatterns": [
+            "<rootDir>/client/",
+            "<rootDir>/node_modules/"
+        ]
     }
 }

@@ -4,7 +4,7 @@ const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const os = require("os");
 const cpu = require("windows-cpu");
-const checkNotificationThreshold = require("./checkNotificationThreshold.js");
+const checkNotificationThreshold = require("./utils/checkNotificationThreshold.js");
 
 const port = process.env.PORT || 5000;
 const delaySeconds = 10;
