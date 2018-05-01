@@ -2,9 +2,11 @@
 
 Web application to monitor CPU utilization on a windows machine.
 
-## Screenshot
+## Screenshots
 
-![Screenshot](https://github.com/teopalva/simple-load-monitor/blob/master/public/img/screenshot.png)
+![Screenshot](https://github.com/yesmar2/system-load-monitor/client/images/CPULoadMonitor.PNG)
+
+![Screenshot](https://github.com/yesmar2/system-load-monitor/client/images/CPULoadMonitorAlerts.PNG)
 
 ## Run locally
 
