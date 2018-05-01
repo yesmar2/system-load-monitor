@@ -1,12 +1,12 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { withFauxDOM } from "react-faux-dom";
 import * as d3 from "d3";
+import timeSince from "utils/timeSince";
 import "./Chart.css";
 
-function timeSince(date) {
-    return (new Date() - date) / 1000 / 60;
-}
+// function timeSince(date) {
+//     return (new Date() - date) / 1000 / 60;
+// }
 
 class Chart extends React.Component {
     constructor(props) {
@@ -16,7 +16,7 @@ class Chart extends React.Component {
         this.updateD3 = this.updateD3.bind(this);
 
         // set the dimensions and margins of the graph
-        this.margin = { top: 30, right: 30, bottom: 50, left: 50 };
+        this.margin = { top: 40, right: 30, bottom: 50, left: 50 };
         this.width = window.innerWidth - this.margin.left - this.margin.right;
         this.height = window.innerHeight - this.margin.top - this.margin.bottom;
 
@@ -41,8 +41,6 @@ class Chart extends React.Component {
     }
 
     renderD3() {
-        const { data } = this.props;
-
         // This will create a faux div and store its virtual DOM in state.chart
         const faux = this.props.connectFauxDOM("div", "chart");
 
@@ -80,7 +78,15 @@ class Chart extends React.Component {
             );
 
         // add the Y Axis
-        svg.append("g").call(d3.axisLeft(this.y));
+        svg
+            .append("g")
+            .call(d3.axisLeft(this.y))
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", "0.71em")
+            .attr("text-anchor", "end")
+            .text("% Utilization");
     }
 
     updateD3() {

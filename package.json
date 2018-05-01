@@ -1,16 +1,21 @@
 {
-  "name": "system-load-monitor",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2",
-    "react-scripts": "1.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
+    "name": "system-load-monitor-api",
+    "version": "1.0.0",
+    "scripts": {
+        "client": "cd client && npm start",
+        "server": "nodemon server.js",
+        "dev":
+            "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+    },
+    "dependencies": {
+        "express": "^4.16.2",
+        "react-s-alert": "^1.4.1",
+        "socket.io": "^1.7.3",
+        "socket.io-client": "^1.7.3",
+        "windows-cpu": "^0.1.4"
+    },
+    "devDependencies": {
+        "concurrently": "^3.5.0",
+        "nodemon": "^1.17.3"
+    }
 }

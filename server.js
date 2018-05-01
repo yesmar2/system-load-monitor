@@ -29,7 +29,7 @@ const monitor = () => {
 
             cpuHistory2.push(dataPoint);
 
-            if (cpuHistory2.length > 13) {
+            if (cpuHistory2.length > 2) {
                 cpuHistory2.shift();
 
                 notification = checkNotificationThreshold(

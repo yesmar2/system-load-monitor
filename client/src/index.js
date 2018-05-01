@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { createStore } from "redux";
 import { connect } from "react-redux";
 import { reducer } from "./reducer";
-import App from "./App";
+import App from "components/App";
 import initSocket from "./initSocket";
 import "./index.css";
 

@@ -47,7 +47,7 @@ class Notifications extends React.Component {
                     {
                         position: "top-right",
                         effect: "slide",
-                        timeout: 3000,
+                        timeout: 5000,
                         html: true
                     }
                 );
@@ -55,7 +55,7 @@ class Notifications extends React.Component {
                 Alert.success(`<h1>High load generation alert recovered</h1>`, {
                     position: "top-right",
                     effect: "slide",
-                    timeout: 3000,
+                    timeout: 5000,
                     html: true
                 });
             }

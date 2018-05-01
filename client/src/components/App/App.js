@@ -1,6 +1,6 @@
 import React from "react";
-import Notifications from "./Notifications";
-import Chart from "./Chart";
+import Notifications from "components/Notifications";
+import Chart from "components/Chart";
 import "./App.css";
 
 class App extends React.Component {
