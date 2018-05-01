@@ -4,9 +4,9 @@ Web application to monitor CPU utilization on a windows machine.
 
 ## Screenshots
 
-![Screenshot](https://github.com/yesmar2/system-load-monitor/client/images/CPULoadMonitor.PNG)
+![Screenshot](https://github.com/yesmar2/system-load-monitor/blob/master/client/src/images/CPULoadMonitor.PNG)
 
-![Screenshot](https://github.com/yesmar2/system-load-monitor/client/images/CPULoadMonitorAlerts.PNG)
+![Screenshot](https://github.com/yesmar2/system-load-monitor/blob/master/client/src/images/CPULoadMonitorAlerts.PNG)
 
 ## Run locally
 
