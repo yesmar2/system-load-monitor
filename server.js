@@ -17,7 +17,7 @@ let cpuHistory10 = [];
 let cpuHistory15 = [];
 let notifications = [];
 
-function loop() {
+const monitor = () => {
     cpuLoad((error, result) => {
         if (error) {
             console.log("CPU load - error retrieving");
@@ -29,7 +29,7 @@ function loop() {
 
             cpuHistory2.push(dataPoint);
 
-            if (cpuHistory2.length > 2) {
+            if (cpuHistory2.length > 13) {
                 cpuHistory2.shift();
 
                 notification = checkNotificationThreshold(
@@ -39,7 +39,6 @@ function loop() {
                 );
 
                 if (notification) {
-                    console.log(notification);
                     notifications.unshift(notification);
                     io.emit("notification", notification);
                 }
@@ -61,15 +60,14 @@ function loop() {
         }
     });
 
-    setTimeout(loop, delaySeconds * 1000);
-}
+    setTimeout(monitor, delaySeconds * 1000);
+};
 
-function cpuLoad(cb) {
+const cpuLoad = cb => {
     cpu.totalLoad((error, cpus) => {
         if (error) {
             return cb(error);
         }
-        //console.loconsole.log("cpus", cpus);
 
         let sum = 0;
         let avg = 0;
@@ -84,7 +82,7 @@ function cpuLoad(cb) {
 
         cb(null, avg);
     });
-}
+};
 
 const listen = () => {
     server.listen(port, () => {
@@ -92,7 +90,7 @@ const listen = () => {
     });
 };
 
-loop();
+monitor();
 
 // Setup socket connection with client
 io.on("connection", client => {

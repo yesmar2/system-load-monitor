@@ -7,24 +7,11 @@ class App extends React.Component {
     constructor(props) {
         super(props);
 
-        this.handleResize = this.handleResize.bind(this);
-
         this.state = {
             chartWidth: window.innerWidth,
+            chartHeight: window.innerHeight,
             loadStatus: "normal"
         };
-    }
-
-    componentDidMount() {
-        window.addEventListener("resize", this.handleResize);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.handleResize);
-    }
-
-    handleResize() {
-        this.setState({ chartWidth: window.innerWidth });
     }
 
     render() {
@@ -37,10 +24,7 @@ class App extends React.Component {
                     <h2>% utilization over past 10 minutes</h2>
                 </header>
                 <Notifications notifications={model.notifications} />
-                <Chart
-                    data={model.cpuHistory10}
-                    width={this.state.chartWidth}
-                />
+                <Chart data={model.cpuHistory10} />
             </div>
         );
     }
