@@ -21,7 +21,10 @@ class App extends React.Component {
             <div className="app">
                 <header>
                     <h1>CPU Load Monitor</h1>
-                    <h2>% utilization over past 10 minutes</h2>
+                    <h2>
+                        % utilization over past 10 minutes with an alert
+                        threshold of 70%
+                    </h2>
                 </header>
                 <Notifications notifications={model.notifications} />
                 <Chart data={model.cpuHistory10} />

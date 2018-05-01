@@ -102,16 +102,17 @@ class Notifications extends React.Component {
             notificationList = notifications.map((notification, index) => {
                 const date = new Date(notification.timestamp);
 
-                const hours = date.getHours();
-                const minutes = "0" + date.getMinutes();
-                const seconds = "0" + date.getSeconds();
-                const formattedTime =
-                    hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2);
+                const formattedTime = date.toLocaleString("en-US", {
+                    hour: "numeric",
+                    minute: "numeric",
+                    second: "numeric",
+                    hour12: true
+                });
 
                 if (notification.isThresholdAlert) {
                     return (
                         <ListItem>
-                            <ListItemIcon>
+                            <ListItemIcon style={{ color: "rgb(247, 90, 91)" }}>
                                 <i className="material-icons">warning</i>
                             </ListItemIcon>
                             <ListItemText
@@ -125,7 +126,7 @@ class Notifications extends React.Component {
                 } else {
                     return (
                         <ListItem>
-                            <ListItemIcon>
+                            <ListItemIcon style={{ color: "rgb(94, 184, 96)" }}>
                                 <i className="material-icons">check_circle</i>
                             </ListItemIcon>
                             <ListItemText

@@ -16,7 +16,7 @@ class Chart extends React.Component {
         this.updateD3 = this.updateD3.bind(this);
 
         // set the dimensions and margins of the graph
-        this.margin = { top: 40, right: 30, bottom: 50, left: 50 };
+        this.margin = { top: 120, right: 30, bottom: 50, left: 50 };
         this.width = window.innerWidth - this.margin.left - this.margin.right;
         this.height = window.innerHeight - this.margin.top - this.margin.bottom;
 
