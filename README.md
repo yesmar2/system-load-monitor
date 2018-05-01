@@ -42,3 +42,4 @@ Web application to monitor CPU utilization on a windows machine.
 *   Utilize css modules.
 *   Add cross-platform compatibility so that user could view load time on linux based machines.
 *   Add SMS/email notifications.
+*   Add more unit and snapshot tests.
