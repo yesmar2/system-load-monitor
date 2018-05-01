@@ -10,10 +10,10 @@ Web application to monitor CPU utilization on a windows machine.
 
 ## Run locally
 
-`git clone https://github.com/yesmar2/system-load-monitor.git`
-`cd system-load-monitor`
-`npm run server`
-`npm run client`
+`git clone https://github.com/yesmar2/system-load-monitor.git`<br />
+`cd system-load-monitor`<br />
+`npm run server`<br />
+`npm run client`<br />
 
 Go to http://localhost:3000/.
 
